@@ -8,21 +8,20 @@ GCOVFLAGS=-fprofile-arcs -ftest-coverage
 LIBNAME=s21_math.a
 GLFLAGS=--coverage
 GCOVFLAGS=-fprofile-arcs -ftest-coverage
-filesArray=("s21_test_abs" "21_test_acos" "s21_test_asin" "s21_test_atan" "s21_test_ceil" "s21_test_cos" "s21_test_exp" "s21_test_fabs" "s21_test_floor" "s21_test_fmod" "s21_test_log" "s21_test_pow" "s21_test_sin" "s21_test_sqrt" "s21_test_tan")
 sourceFilesArray=$(ls sourceFiles)
 
-ifeq ($(OSTYPE),linux-gnu)
-    OPEN_CMD = xdg-open
-endif
-ifeq ($(OSTYPE),darwin)
-    OPEN_CMD = open
-endif
-ifeq ($(OSTYPE),cygwin)
-    OPEN_CMD = start
-endif
-ifeq ($(OSTYPE),msys)
-    OPEN_CMD = start
-endif
+# ifeq ($(OSTYPE),linux-gnu)
+#     OPEN_CMD = xdg-open
+# endif
+# ifeq ($(OSTYPE),darwin)
+#     OPEN_CMD = open
+# endif
+# ifeq ($(OSTYPE),cygwin)
+#     OPEN_CMD = start
+# endif
+# ifeq ($(OSTYPE),msys)
+#     OPEN_CMD = start
+# endif
 
 
 
@@ -84,7 +83,7 @@ start_tests:
 gcov_report: clean build_object_files build_library test
 	lcov -o tests.info -c -d .  
 	genhtml -o report tests.info
-	xdg-open report/index.html &
+	xdg-open report/index.html
 	make clean
 
 gen_html: start_tests gcov_report

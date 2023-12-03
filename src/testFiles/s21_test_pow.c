@@ -85,9 +85,18 @@ START_TEST(test_s21_math_pow_cases_should_return_one) {
 }
 END_TEST
 
+
+START_TEST(test_s21_math_pow_int_base) {
+  ck_assert_ldouble_eq_tol(s21_pow(3.0, 2.0), 9.0, 1e-6);
+  ck_assert_ldouble_eq_tol(s21_pow(10.0, 0.0), 1.0, 1e-6);
+  ck_assert_ldouble_eq_tol(s21_pow(-5.0, 2.0), 25.0, 1e-6);
+  ck_assert_ldouble_eq_tol(s21_pow(-2.0, 3.0), -8.0, 1e-6);
+}
+END_TEST
+
 Suite *s21_math_pow_suite() {
   Suite *s;
-  TCase *tc_pow_big, *tc_pow_small, *tc_pow_usual, *tc_pow_unusual;
+  TCase *tc_pow_big, *tc_pow_small, *tc_pow_usual, *tc_pow_unusual, *tc_pow_int_base;
 
   s = suite_create("pow");
 
@@ -108,6 +117,10 @@ Suite *s21_math_pow_suite() {
   tcase_add_test(tc_pow_unusual, test_s21_math_pow_cases_should_return_inf);
   tcase_add_test(tc_pow_unusual, test_s21_math_pow_cases_should_return_one);
   suite_add_tcase(s, tc_pow_unusual);
+
+  tc_pow_int_base = tcase_create("pow_int_base");
+  tcase_add_test(tc_pow_int_base, test_s21_math_pow_int_base);
+  suite_add_tcase(s, tc_pow_int_base);
 
   return s;
 }
