@@ -7,27 +7,12 @@ CHECKFLAGS=$(shell pkg-config --cflags --libs check)
 GCOVFLAGS=-fprofile-arcs -ftest-coverage
 LIBNAME=s21_math.a
 GLFLAGS=--coverage
-GCOVFLAGS=-fprofile-arcs -ftest-coverage
 sourceFilesArray=$(ls sourceFiles)
 
-# ifeq ($(OSTYPE),linux-gnu)
-#     OPEN_CMD = xdg-open
-# endif
-# ifeq ($(OSTYPE),darwin)
-#     OPEN_CMD = open
-# endif
-# ifeq ($(OSTYPE),cygwin)
-#     OPEN_CMD = start
-# endif
-# ifeq ($(OSTYPE),msys)
-#     OPEN_CMD = start
-# endif
 
-
+peer: gcov_report gcov_html
 
 all: s21_math.a
-
-peer: gcov_report
 
 build_object_files:
 	$(CC) $(FLAGS) $(GCOVFLAGS) $(GLFLAGS) -c $(FUNC_FILES_C)
@@ -35,9 +20,8 @@ build_object_files:
 build_library:
 	ar rcs $(LIBNAME) $(FUNC_FILES_O)
 
-s21_math.a:
-	$(CC) $(FLAGS) -c $(FUNC_FILES_C)
-	cp t/s21_math.h s21_math.h
+s21_math.a: build_object_files
+# 	cp tests/s21_math.h s21_math.h
 	make build_library
 	rm -rf *.o
 
@@ -59,7 +43,6 @@ test: s21_math.a
 	$(CC) tests/s21_test_tan.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) $(GCOVFLAGS) -o s21_test_tan
 
 	make start_tests
-# 	make clean_tests
 
 make clean_tests:
 	rm -rf s21_test*
@@ -82,12 +65,12 @@ start_tests:
 	./s21_test_tan
 
 gcov_report: clean build_object_files build_library test
-	lcov -o tests.info -c -d .
-	genhtml -o report tests.info
-	xdg-open report/index.html
-	make clean
+	gcov -o $(FUNC_FILES_C)
+#	pip install git+https://github.com/gcovr/gcovr.git
+	~/.local/bin/gcovr -r . --html --html-details -o s21_math.html
 
-gen_html: start_tests gcov_report
+gcov_html: start_tests gcov_report
+	xdg-open s21_math.html
 
 clean:
 	rm -rf *.o
@@ -95,9 +78,6 @@ clean:
 	rm -rf *.gcov
 	rm -rf *.gcda
 	rm -rf *.a
-	rm -rf *.info
 	rm -rf s21*
 
-rebuild:
-	make clean
-	make
+rebuild: clean all
