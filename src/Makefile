@@ -26,21 +26,21 @@ s21_math.a: build_object_files
 	rm -rf *.o
 
 test: s21_math.a
-	$(CC) tests/s21_test_abs.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) $(GCOVFLAGS) -o s21_test_abs
-	$(CC) tests/s21_test_acos.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) $(GCOVFLAGS) -o s21_test_acos
-	$(CC) tests/s21_test_asin.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) $(GCOVFLAGS) -o s21_test_asin
-	$(CC) tests/s21_test_atan.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) $(GCOVFLAGS) -o s21_test_atan
-	$(CC) tests/s21_test_ceil.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) $(GCOVFLAGS) -o s21_test_ceil
-	$(CC) tests/s21_test_cos.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) $(GCOVFLAGS) -o s21_test_cos
-	$(CC) tests/s21_test_exp.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) $(GCOVFLAGS) -o s21_test_exp
-	$(CC) tests/s21_test_fabs.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) $(GCOVFLAGS) -o s21_test_fabs
-	$(CC) tests/s21_test_floor.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) $(GCOVFLAGS) -o s21_test_floor
-	$(CC) tests/s21_test_fmod.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) $(GCOVFLAGS) -o s21_test_fmod
-	$(CC) tests/s21_test_log.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) $(GCOVFLAGS) -o s21_test_log
-	$(CC) tests/s21_test_pow.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) $(GCOVFLAGS) -o s21_test_pow
-	$(CC) tests/s21_test_sin.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) $(GCOVFLAGS) -o s21_test_sin
-	$(CC) tests/s21_test_sqrt.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) $(GCOVFLAGS) -o s21_test_sqrt
-	$(CC) tests/s21_test_tan.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) $(GCOVFLAGS) -o s21_test_tan
+	$(CC) tests/s21_test_abs.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) -o s21_test_abs
+	$(CC) tests/s21_test_acos.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) -o s21_test_acos
+	$(CC) tests/s21_test_asin.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) -o s21_test_asin
+	$(CC) tests/s21_test_atan.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) -o s21_test_atan
+	$(CC) tests/s21_test_ceil.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) -o s21_test_ceil
+	$(CC) tests/s21_test_cos.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) -o s21_test_cos
+	$(CC) tests/s21_test_exp.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) -o s21_test_exp
+	$(CC) tests/s21_test_fabs.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) -o s21_test_fabs
+	$(CC) tests/s21_test_floor.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) -o s21_test_floor
+	$(CC) tests/s21_test_fmod.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) -o s21_test_fmod
+	$(CC) tests/s21_test_log.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) -o s21_test_log
+	$(CC) tests/s21_test_pow.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) -o s21_test_pow
+	$(CC) tests/s21_test_sin.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) -o s21_test_sin
+	$(CC) tests/s21_test_sqrt.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) -o s21_test_sqrt
+	$(CC) tests/s21_test_tan.c -L. s21_math.a $(CHECKFLAGS) $(GLFLAGS) -o s21_test_tan
 
 	make start_tests
 
@@ -65,11 +65,13 @@ start_tests:
 	./s21_test_tan
 
 gcov_report: clean build_object_files build_library test
-	gcov -o $(FUNC_FILES_C)
+# 	gcov -o $(FUNC_FILES_C)
+	gcov *.gcno
+	gcov *.gcda
 #	pip install git+https://github.com/gcovr/gcovr.git
-	~/.local/bin/gcovr -r . --html --html-details -o s21_math.html
+	~/.local/bin/gcovr -r . --html --html-details -o s21_math.html --exclude 'tests/.*'
 
-gcov_html: start_tests gcov_report
+gcov_html:
 	xdg-open s21_math.html
 
 clean:
